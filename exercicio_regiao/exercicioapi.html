@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Região</title>
+</head>
+<body>
+    <h1>Estados e Regiões</h1>
+
+    <div id="estados">
+    <div id="regioes">
+    <div id="estado"></div>
+
+    <input type="button" value="Listar estados" id="botaoEstado" onclick="mostrarEstado()" />
+    <input type="button" value="Agrupar regiao" id="botaoRegiao" onclick="agruparRegiao()" />
+    <br><br>
+	<label for="uf">UF:</label>
+	<input type="text" id="uf">
+	<button onclick="buscarEstado()">Buscar Estado</button>
+	<br><br>
+  
+    <script>
+        
+        async function buscarJSON(){
+            const response = await fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados");
+            const estados = await response.json();
+            return estados;
+        }
+        async function mostrarEstado(){
+            let divEstados = document.getElementById('estados');
+            let dados = await buscarJSON();
+            dados.map((estado)=>{
+                    divEstados.innerHTML += `<li> ${estado.nome} </li>`
+                });
+        }
+        
+        async function agruparRegiao() {
+            let divRegioes = document.getElementById('regioes');
+            let dados = await buscarJSON();
+
+            let estadosRegiao = new Map();
+            dados.forEach((estado) => {
+            let regiao = estado.regiao.nome;
+            if (!estadosRegiao.has(regiao)) {
+            estadosRegiao.set(regiao, []);
+    }
+            estadosRegiao.get(regiao).push(estado);
+  });
+
+            estadosRegiao.forEach((estados, regiao) => {
+            let estadosRegioes = estados.map((estado) => estado.nome);
+            divRegioes.innerHTML += `<p><b>${regiao}:</b> ${estadosRegioes}<p>`;
+  });
+}
+
+        async function buscarEstado() {
+			let uf = document.getElementById('uf').value.toUpperCase();
+            if (uf.length !== 2) {
+				console.error('UF inválida');
+				return;
+			}
+        
+            let ufs = await buscarJSON();
+            let estado = ufs.find((estado) => estado.sigla === uf);
+            let estadoDiv = document.getElementById('estado');
+			estadoDiv.innerHTML = estado.nome;
+		}
+     
+
+        </script>
+
+</body>
+</html>
