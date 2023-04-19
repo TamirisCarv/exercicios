@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   
+       <h1> Exercício Atravessar Rua </h1>
+    
+    <h2>
+      Posição Inicial <input type="number" id="posicao"> <br>
+      Destino <input type="number" id="destino"> <br>
+      Distância do passo <input type="number" id="passo">
+
+       <input type="button" value="Calcular" onclick="atravessaRua()">
+    </h2>
+
+
+       <div id="resultado"> </div>
+      
+      <script>
+          let quantidade= Number(0);
+          let i=0;
+         function atravessaRua(){
+            let posicao = Number(document.getElementById('posicao').value);
+            let destino = Number(document.getElementById('destino').value);
+            let passo = Number(document.getElementById('passo').value);
+          
+     
+  
+       while (destino >= posicao)  {
+           quantidade += destino - passo;
+           i++;
+           posicao += passo;
+       } 
+
+       let passostotal=i-1;
+         
+            document.getElementById('resultado').innerHTML = '<h2> A quantidade mínima de passos é: ' + passostotal + '</h2>';
+            
+         }
+       
+    </script>
+</body>
+</html>
